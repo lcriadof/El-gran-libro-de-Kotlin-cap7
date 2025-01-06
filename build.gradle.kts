@@ -16,22 +16,34 @@ repositories {
 }
 
 dependencies {
+    // para buscar dependencias transitivas usar:  ./gradlew dependencies
+    // para limpia y reconstruir el proyecto: ./gradlew clean build
+
     testImplementation(kotlin("test")) // agrega las funcionalidades básicas de prueba para Kotlin, usando frameworks como JUnit.
     implementation("org.jetbrains.kotlin:kotlin-stdlib") // Librería estándar de Kotlin
 
-
-    // Dependencia para Log4j 2
-    implementation("org.apache.logging.log4j:log4j-core:2.20.0") // Núcleo de Log4j
-    implementation("org.apache.logging.log4j:log4j-api:2.20.0") // API de Log4j
-
     // epublib
-    implementation("nl.siegmann.epublib:epublib-core:3.1")
+    // Excluir slf4j-simple para el resto, esta versión solo funciona para epublib-core
+    implementation("nl.siegmann.epublib:epublib-core:3.1") {
+        exclude(group = "org.slf4j", module = "slf4j-simple")
+    }
 
-    // SLF4J API
-    implementation("org.slf4j:slf4j-api:1.7.32")
+    // Jena Core
+      // https://mvnrepository.com/artifact/org.apache.jena/jena-core
+      // https://mvnrepository.com/artifact/com.hp.hpl.jena/jena
+    // si usamos versiones superiores de Jena probablemente hay que elevar la versión de Java
+    // Excluir slf4j-simple para el resto, esta versión solo funciona para jena
+    implementation("org.apache.jena:jena-core:4.8.0") {
+        exclude(group = "org.slf4j", module = "slf4j-simple")
+    }
 
-    // Implementación de SLF4J para Log4j
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.2")
+    // Log4j2 y SLF4J
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0") // Implementación de Log4j2
+    implementation("org.apache.logging.log4j:log4j-api:2.20.0") // API de Log4j2
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0") // Si usas SLF4J para logging
+    // Forzar la versión de SLF4J
+    implementation("org.slf4j:slf4j-api:1.7.36")
+
 
     // JSON con Kotlinx Serialization
     //implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0") // Librería de serialización JSON
@@ -41,20 +53,10 @@ dependencies {
     // GSON
     implementation("com.google.code.gson:gson:2.10.1")
 
-
     // EXCEL
     implementation("com.opencsv:opencsv:5.7.1")
     // https://mvnrepository.com/artifact/org.apache.poi/poi
     implementation("org.apache.poi:poi:5.3.0")
-
-
-    // Jena
-    // https://mvnrepository.com/artifact/org.apache.jena/jena-core
-    implementation("org.apache.jena:jena-core:5.2.0")
-    // https://mvnrepository.com/artifact/com.hp.hpl.jena/jena
-    implementation("com.hp.hpl.jena:jena:2.6.4")
-
-
 
 
 }

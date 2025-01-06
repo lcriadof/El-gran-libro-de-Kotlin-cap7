@@ -1,6 +1,7 @@
 /*
 El gran libro de Kotlin
-(para programadores de back end)
+EDICION 2
+(para programadores de back end y científicos de datos)
 
 Editorial: Marcombo (https://www.marcombo.com/)
 Autor: Luis Criado Fernández (http://luis.criado.online/)
@@ -17,12 +18,12 @@ class pruebaLog {
         val logging = LogManager.getLogger() // 1
     }
     fun mostrar(){ // 2
-        logging.error("Hola mundo!, nivel: error")
-        logging.warn("Hola mundo!, nivel: warn ")
-        logging.fatal("Hola mundo!, nivel: fatal ")
-        logging.debug("Hola mundo!, nivel: Debug ")
-        logging.trace("Hola mundo!, nivel: trace ")
-        logging.info("Hola mundo!, nivel: info ")
+        logging.error("Hola mundo!")
+        logging.warn("Hola mundo!")
+        logging.fatal("Hola mundo!")
+        logging.debug("Hola mundo!")
+        logging.trace("Hola mundo!")
+        logging.info("Hola mundo!")
     }
 }
 

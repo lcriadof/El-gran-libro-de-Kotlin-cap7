@@ -34,7 +34,16 @@ fun main(){
     val nombreComleto:String="luis.criado.fernandez@gmail.com"
     luisCriado.addProperty(VCARD.EMAIL, nombreComleto) // [4]
     val directorioRaiz:String="/rdf/"
-    var url:String= recursos::class.java.getResource(directorioRaiz).path  // [5]
+
+
+    // var url:String= recursos::class.java.getResource(directorioRaiz).path  // [5]  primera edición
+
+
+    val url = recursos::class.java.getResource(directorioRaiz)?.toURI()?.path  // [5] segunda edicion
+        ?: throw IllegalArgumentException("El recurso $directorioRaiz no fue encontrado.")
+
+
+
     println("url: $url")  // [6]
 
 
