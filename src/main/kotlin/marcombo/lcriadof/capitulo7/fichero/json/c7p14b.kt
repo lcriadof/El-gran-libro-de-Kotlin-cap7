@@ -12,23 +12,34 @@ package marcombo.lcriadof.capitulo7.fichero.json
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import marcombo.lcriadof.capitulo7.fichero.DirectorioBase
+import marcombo.lcriadof.capitulo7.fichero.recurso.Companion.logging
 import java.io.File
 
 
 //ejemplo inspirado en un post de (mkyong)  https://mkyong.com/java/how-to-parse-json-with-gson/
 
 fun main() {
-    var listaMunicipios = arrayOf(
+    var listaMunicipios = arrayOf( // [1]
         Municipios("001", 3.019213174748399, "280014", "Sierra Norte", "Acebeda (La)", "06", 21.86),
         Municipios("002", 225.0, "280029", "Este Metropolitano", "Ajalvir", "03", 19.8)
-    ) // [1]
+    )
+
+    // [1b] bloque introducido en segunda edicion
+    val directorio = DirectorioBase() // Crear una instancia de la clase
+    directorio.getDirectoriosAbsoluto("./json/").let { resultado ->
+        if (resultado == 0) directorio.directorioAbsolutoBase else return
+    }
+    logging.info("Recurso encontrado en: ${directorio.directorioAbsolutoBase}") // segunda edicion
+    //  fin del nuevo bloque segunda edicion
+
 
 
     //val json = Gson().toJson(listaEstudiantes) // Json sin tabular directo en una linea
     val gson = GsonBuilder().setPrettyPrinting().create() // [2]
     val json = gson.toJson(listaMunicipios) // [3]
     println(json.toString()) // [4]
-    File("/tmp/kotlin/prueba2.json").writeText(json) // [5]
+    File("${directorio.directorioAbsolutoBase}prueba2.json").writeText(json) // [5]
 
 
 

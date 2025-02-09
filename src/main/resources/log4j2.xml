@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Configuration status="INFO">
-    <!--  Controla el nivel de log de los mensajes internos de Log4j2.
-          No afecta a los logs de tu aplicación.
-
-          Cuando se establece en DEBUG, Log4j2 registrará por CONSOLA información detallada sobre su propio
-       funcionamiento,  como la carga de configuraciones, la activación de appenders, la creación de loggers,
-       entre otros eventos internos. Esto es útil para la depuración del sistema de logging,
-       pero no afecta al nivel de log de la propia aplicación.
-    -->
-
     <Appenders>
-        <!-- Definición del appender para consola -->
-        <Console name="Console" target="SYSTEM_OUT">
+        <RollingFile name="fichero_rotativos"
+                     fileName="./log/log_actual.log"
+                     filePattern="./log/log_%i.log">  // 1
             <PatternLayout>
-                <Pattern>%d %p %c [%t] %m%n</Pattern>
+                <Pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %r [%-6p] [%t] %c{3} %C{3}.%M(%F:%L) – %m%n</Pattern>  // 2
             </PatternLayout>
-        </Console>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />  // 3
+            </Policies>
+            <DefaultRolloverStrategy max="5" />  // 4
+        </RollingFile>
     </Appenders>
 
     <Loggers>
-
-        <!-- Configuración del logger raíz con nivel TRACE -->
-        <Root level="WARN">
-            <AppenderRef ref="Console"/>
+        <Root level="TRACE">  <!-- 5 -->
+            <AppenderRef ref="fichero_rotativos"/>
         </Root>
     </Loggers>
+
 </Configuration>
+
+
 

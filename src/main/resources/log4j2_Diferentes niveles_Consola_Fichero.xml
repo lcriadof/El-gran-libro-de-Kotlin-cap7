@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="INFO">
+    <Appenders>
+        <!-- Definición del appender para archivo -->
+        <File name="LogToFile" fileName="./log/app.log">
+            <PatternLayout>
+                <Pattern>%d %p %c [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+
+        <!-- Definición del appender para consola -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d %p %c [%t] %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- Logger raíz para manejar todos los logs, pero solo en archivo -->
+        <Root level="TRACE">
+            <AppenderRef ref="LogToFile"/> <!-- Logs hacia archivo -->
+        </Root>
+
+        <!-- Logger específico para la consola con nivel FATAL -->
+        <Logger name="marcombo.lcriadof" level="FATAL" additivity="true">
+            <AppenderRef ref="Console"/> <!-- Solo logs FATAL en consola -->
+        </Logger>
+    </Loggers>
+</Configuration>
+
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="INFO">
+    <!--  Controla el nivel de log de los mensajes internos de Log4j2.
+          No afecta a los logs de tu aplicación.
+
+          Cuando se establece en DEBUG, Log4j2 registrará por CONSOLA información detallada sobre su propio
+       funcionamiento,  como la carga de configuraciones, la activación de appenders, la creación de loggers,
+       entre otros eventos internos. Esto es útil para la depuración del sistema de logging,
+       pero no afecta al nivel de log de la propia aplicación.
+    -->
+
+    <Appenders>
+        <!-- Definición del appender para consola -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d %p %c [%t] %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+
+        <!-- Configuración del logger raíz con nivel TRACE -->
+        <Root level="WARN">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
+

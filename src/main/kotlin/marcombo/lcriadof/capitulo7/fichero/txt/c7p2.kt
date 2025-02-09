@@ -11,31 +11,52 @@ CAPÍTULO 7: FICHEROS
 package marcombo.lcriadof.capitulo7.fichero.txt
 
 import marcombo.lcriadof.capitulo6.ficheros
-import marcombo.lcriadof.capitulo7.fichero.recursos
 import java.io.File
 
+import marcombo.lcriadof.capitulo7.fichero.recurso.Companion.logging
+
+// IMPORTANTE en main() hemos introducido logs en lugar de println() de la primera edición
+//   no se ha cambiado la clase fichTexto
 fun main(){
-    val directorioRaiz:String="/txt/"
-    val url:String= recursos::class.java.getResource(directorioRaiz).path //1
-    println("url: $url")
+    val directorioRaiz:String="./txt/"
+
+    //val url:String= recursos::class.java.getResource(directorioRaiz).path //1  (edición primera)
+
+    // 1
+    val url = Thread.currentThread().contextClassLoader.getResource(directorioRaiz)?.path
+        ?: run {
+            logging.fatal("No se encontró el directorio raíz: $directorioRaiz")
+            return  // en este caso el hilo, es el principal, al hacer return interrumpimos la ejecucion completa
+        }
+
+
+    logging.info("url: $url")
 
     var f=fichTexto(url+"f6.txt") // 2
     f.usar()
-    println("abrimos: "+f.usar())
-    println("leemos: "+f.leer())
+    logging.trace("abrimos: "+f.usar())
 
+
+    logging.trace("Leemos")
+    println("leemos: \n"+f.leer())
     println(f.contenido)
 
+    logging.trace("escribimos")
     println("Escribimos: "+f.agregar("101"))
     println("Escribimos: "+f.agregar(102))
-    println("\nleemos: \n"+f.leer())
+
+    logging.trace("Leemos")
+    println("leemos: \n"+f.leer())
+
     f.borrarTodoElContenido()
-    println("\nleemos: \n "+f.leer())
+    logging.trace("Leemos")
+    println("leemos: \n"+f.leer())
 
     for (x in 1..25){
         f.agregar(x)
     }
-    println("\nleemos: \n"+f.leer())
+    logging.trace("Leemos")
+    println("leemos: \n"+f.leer())
 
     //f.borrarFichero()
 

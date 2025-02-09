@@ -11,6 +11,7 @@ CAPÍTULO 7: FICHEROS
 package marcombo.lcriadof.capitulo7.fichero.properties
 
 import marcombo.lcriadof.capitulo6.ficheros
+import marcombo.lcriadof.capitulo7.fichero.recurso.Companion.logging
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
@@ -20,16 +21,24 @@ import java.util.*
 
 
 fun main(){
-    val directorioRaiz:String="/tmp/kotlin/"+"oracleBITver2.properties"
 
-    val fp=fichProperties(directorioRaiz)
+    val directorioRaiz:String="./properties/"
+    // 1
+    val url = Thread.currentThread().contextClassLoader.getResource(directorioRaiz)?.path
+        ?: run {
+            logging.fatal("No se encontró el directorio raíz: $directorioRaiz")
+            return  // en este caso el hilo, es el principal, al hacer return interrumpimos la ejecucion completa
+        }
+    logging.info("url: $url")
+
+    val fp=fichProperties(url+"oracleBITver2.properties") //2
 
     fp.usar()
     fp.leer()
     fp.agregar("prueba.prueba","hola mundo")
     fp.leer()
     println(fp.contenido)
-    println(fp.get("fichero.out"))
+    println(fp.get("usuario.clave"))
 
 }
 
