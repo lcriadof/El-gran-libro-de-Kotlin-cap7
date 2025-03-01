@@ -1,77 +1,69 @@
-package marcombo.lcriadof.capitulo7.fichero.binario
+/*
+Programa que comprueba si el número introducido es primo.
+ El valor máximo comprobable es 1.342.177.280
+ El valor máximo es el del archivo binario usado como tabla de verificación '0000.pdb'.
+ El resultado es instantáneo.
+ Se han seguido las pautas especificadas por ChuxMan en el siguiente repositorio:
+  https://github.com/pekesoft/PrimesDB
 
+ by @lcriadof
+ XX-02-2025
+*/
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
-import java.io.File
+import marcombo.lcriadof.capitulo7.fichero.DirectorioBase
+import marcombo.lcriadof.capitulo7.fichero.recurso.Companion.logging
 
+fun esPrimoBaseDatos(numero: Int, baseDatos: ByteArray): Boolean {
+    // Los primeros primos conocidos
+    if (numero in listOf(2, 3, 5, 7)) return true
 
-@Serializable
-data class Persona(val nombre: String, val edad: Int)
+    // Los números terminados en 0, 2, 4, 5, 6, 8 no pueden ser primos
+    val ultimoDigito = numero % 10
+    if (ultimoDigito in listOf(0, 2, 4, 5, 6, 8)) return false
 
-fun escribirObjetosBinario() {
-    val personas = listOf(
-        Persona("Alice", 30),
-        Persona("Bob", 25),
-        Persona("Charlie", 35),
-        Persona("Diana", 28),
-        Persona("Edward", 40)
-    )
+    // Determinar la década del número
+    val decada = numero / 10
+    val direccion = (decada / 2.0 + 0.5).toInt() - 1
 
-    // Convertir objetos a JSON
-    val json = Json.encodeToString(personas)
+    if (direccion < 0 || direccion >= baseDatos.size) return false // Fuera del rango de la base de datos
 
-    // Guardar JSON en un fichero binario
-    val fichero = File("personas.bin")
-    fichero.writeBytes(json.toByteArray())
+    // Mapeo de últimos dígitos posibles a posiciones de bits
+    val bits = mapOf(1 to 0, 3 to 1, 7 to 2, 9 to 3)
+    val posicionBit = bits[ultimoDigito] ?: return false
+
+    // Si la década es par, el bit está en la parte alta del byte (nibble alto)
+    val bitPosicionFinal = if (decada % 2 == 0) posicionBit + 4 else posicionBit
+
+    // Extraer el byte correspondiente y verificar el bit
+    val byte = baseDatos[direccion].toInt() and 0xFF
+    return (byte shr bitPosicionFinal) and 1 == 1
 }
 
-fun leerObjetosBinario() {
-    // Leer JSON desde un fichero binario
-    val fichero = File("personas.bin")
-    val json = String(fichero.readBytes())
 
-    // Convertir JSON a objetos
-    val personas: List<Persona> = Json.decodeFromString(json)
-    println("Personas leídas: $personas")
-}
+fun main() {
 
-fun modificarPersona(indice: Int, nuevaPersona: Persona) {
-    // Leer JSON desde un fichero binario
-    val fichero = File("personas.bin")
-    val json = String(fichero.readBytes())
+    // 1
+    val directorio = DirectorioBase() // Crear una instancia de la clase
+    directorio.getDirectoriosAbsoluto("./binario/").let { resultado ->
+        if (resultado == 0) directorio.directorioAbsolutoBase else return
+    }
+    logging.info("Recurso encontrado en: ${directorio.directorioAbsolutoBase}")
 
-    // Convertir JSON a objetos
-    val personas = Json.decodeFromString<List<Persona>>(json).toMutableList()
 
-    // Modificar la persona específica
-    if (indice in personas.indices) {
-        personas[indice] = nuevaPersona
-    } else {
-        println("Índice fuera de rango")
+    val archivo = java.io.File("${directorio.directorioAbsolutoBase}/0000.pdb")
+    if (!archivo.exists()) {
+        logging.info("\"No se encontró la base de datos de primos en: ${directorio.directorioAbsolutoBase}")
         return
     }
 
-    // Convertir objetos a JSON
-    val nuevoJson = Json.encodeToString(personas)
+    val baseDatos = archivo.readBytes()
 
-    // Guardar JSON modificado en un fichero binario
-    fichero.writeBytes(nuevoJson.toByteArray())
+    val numero = 756101
+    if (numero > 1_342_177_280) {
+        println("Introduzca un número válido menor o igual a 1342177280")
+    }else{
+        val resultado = esPrimoBaseDatos(numero, baseDatos)
+        println("$numero ${if (resultado) "ES PRIMO" else "no es primo"}")
+    }
 }
 
-fun main() {
-    // Escribir los objetos en el fichero binario
-    escribirObjetosBinario()
-
-    // Leer y mostrar los objetos del fichero
-    leerObjetosBinario()
-
-    // Modificar la tercera persona (índice 2)
-    println("Modificando la tercera persona...")
-    modificarPersona(2, Persona("Carlos", 36))
-
-    // Leer y mostrar los objetos después de la modificación
-    leerObjetosBinario()
-}

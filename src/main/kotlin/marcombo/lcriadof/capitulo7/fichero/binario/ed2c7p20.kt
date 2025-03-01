@@ -23,16 +23,16 @@ fun main() {
         try {
                 logging.info("Escribiendo datos en fichero binario")
                 logging.trace("Crear un flujo de salida de fichero")
-                val fichero = FileOutputStream("${directorio.directorioAbsolutoBase}datos.bin")
+                val fichero = FileOutputStream("${directorio.directorioAbsolutoBase}datos.bin") // [2.1]
 
                 logging.trace("Datos a escribir en el fichero (array de bytes)")
-                val datos = byteArrayOf(1, 2, 3, 4, 5)
+                val datos = byteArrayOf(1, 2, 3, 4, 5) // [2.2]
 
                 logging.trace("Escribir los datos en el fichero")
-                fichero.write(datos)
+                fichero.write(datos) // [2.3]
 
                 logging.trace("Cerrar el flujo de salida")
-                fichero.close()
+                fichero.close() // [2.4]
 
         } catch (e: FileNotFoundException) {
                 logging.fatal("El fichero no pudo ser creado o no se encontró el path: ${e.message}")

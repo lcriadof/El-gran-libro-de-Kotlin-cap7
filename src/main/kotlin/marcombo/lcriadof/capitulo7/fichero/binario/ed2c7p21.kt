@@ -13,17 +13,17 @@ fun main() {
     }
     logging.info("Recurso encontrado en: ${directorio.directorioAbsolutoBase}")
 
-    // 2
-    // Crear un flujo de entrada de fichero
+    // 2  se recomiendo introducir una estructura try-catch como ejercicio
+    // [2.1] Crear un flujo de entrada de fichero
     val fichero = FileInputStream("${directorio.directorioAbsolutoBase}datos.bin")
 
-    // Buffer para leer los datos del fichero (tamaño del array debe coincidir con el tamaño de los datos)
+    // [2.2] Buffer para leer los datos del fichero (tamaño del array debe coincidir con el tamaño de los datos)
     val buffer = ByteArray(5)
 
-    // Leer los datos del fichero en el buffer
+    // [2.3] Leer los datos del fichero en el buffer
     fichero.read(buffer)
 
-    // Cerrar el flujo de entrada
+    // [2.4] Cerrar el flujo de entrada
     fichero.close()
 
     // Imprimir los datos leídos

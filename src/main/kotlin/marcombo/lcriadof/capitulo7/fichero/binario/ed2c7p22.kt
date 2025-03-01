@@ -6,24 +6,23 @@ import java.io.RandomAccessFile
 
 // Modificar un fichero binario
 fun modificarTercerDato(nuevoDato: Byte) {
-    // 1
+    // bloque 1
     val directorio = DirectorioBase() // Crear una instancia de la clase
     directorio.getDirectoriosAbsoluto("./binario/").let { resultado ->
         if (resultado == 0) directorio.directorioAbsolutoBase else return
     }
     logging.info("Recurso encontrado en: ${directorio.directorioAbsolutoBase}")
 
-    // 2
-    // Crear un flujo de salida de fichero
+    // bloque 2
+
+    // 2.1
     val fichero = RandomAccessFile("${directorio.directorioAbsolutoBase}datos.bin", "rw")
 
-    // Cada dato ocupa 1 byte, así que la posición del tercer dato es 2 (0-indexed)
-    val posicion = 2
-
-    fichero.seek(posicion.toLong())
-    fichero.writeByte(nuevoDato.toInt())
+    val posicion = 2 // 2.2
+    fichero.seek(posicion.toLong()) // 2.3
+    fichero.writeByte(nuevoDato.toInt()) // 2.4
     logging.info("Valor modificado: "+nuevoDato.toInt())
-    fichero.close()
+    fichero.close() // 2.5
 }
 
 fun main() {

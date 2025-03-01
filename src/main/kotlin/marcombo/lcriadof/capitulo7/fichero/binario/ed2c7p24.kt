@@ -48,14 +48,12 @@ fun leerFicheroBinario(fileName:String) {
 fun modificarNumero(fileName:String,indice: Int, nuevoNumero: Double) {
     val fichero = RandomAccessFile(fileName, "rw")
 
-    // Cada número double ocupa 8 bytes, así que la posición del número en el fichero es 8 * indice
-    val posicion = 8 * indice
-
-    fichero.seek(posicion.toLong()) // nos posicionamos en el lugar correcto
-    fichero.writeDouble(nuevoNumero) //  escribir el nuevo valor para datos primitivos writeInt(), writeDouble(), etc.
-
+    val posicion = 8 * indice // [1]
+    fichero.seek(posicion.toLong()) // [2]
+    fichero.writeDouble(nuevoNumero) // [3]
     fichero.close()
 }
+
 
 
 fun main() {

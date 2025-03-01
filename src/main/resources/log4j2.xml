@@ -9,7 +9,7 @@
                 <Pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %r [%-6p] [%t] %c{3} %C{3}.%M(%F:%L) – %m%n</Pattern>  // 2
             </PatternLayout>
             <Policies>
-                <SizeBasedTriggeringPolicy size="10MB" />  // 3
+                <SizeBasedTriggeringPolicy size="4MB" />  // 3
             </Policies>
             <DefaultRolloverStrategy max="5" />  // 4
         </RollingFile>
