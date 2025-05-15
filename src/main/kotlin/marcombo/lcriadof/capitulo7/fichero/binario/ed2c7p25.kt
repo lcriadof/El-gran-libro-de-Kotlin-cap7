@@ -13,30 +13,23 @@ Programa que comprueba si el número introducido es primo.
 import marcombo.lcriadof.capitulo7.fichero.DirectorioBase
 import marcombo.lcriadof.capitulo7.fichero.recurso.Companion.logging
 
-fun esPrimoBaseDatos(numero: Int, baseDatos: ByteArray): Boolean {
-    // Los primeros primos conocidos
-    if (numero in listOf(2, 3, 5, 7)) return true
+fun esPrimoBaseDatos(numero: Int, baseDatos: ByteArray): Int {
+    if (numero in listOf(1, 2, 3, 5, 7)) return 1 // 1
+    val ultimoDigito = numero % 10 // 2
+    if (ultimoDigito in listOf(0, 2, 4, 5, 6, 8)) return 0 // 3
+    val decada = numero / 10 // [4] dirección del byte
+    val direccion = (decada / 2.0 + 0.5).toInt() - 1  // fin de 4
 
-    // Los números terminados en 0, 2, 4, 5, 6, 8 no pueden ser primos
-    val ultimoDigito = numero % 10
-    if (ultimoDigito in listOf(0, 2, 4, 5, 6, 8)) return false
+    // [6] Determinamos la posición del bit dentro del nibble en base al byte seleccionado
+    val bits = mapOf(1 to 0, 3 to 1, 7 to 2, 9 to 3) // 6.1
+    val posicionBit = bits[ultimoDigito] ?: return -1 // 6.2
+    val bitPosicionFinal = if (decada % 2 == 0) posicionBit + 4 else posicionBit // 6.3
+    // fin de 6
 
-    // Determinar la década del número
-    val decada = numero / 10
-    val direccion = (decada / 2.0 + 0.5).toInt() - 1
-
-    if (direccion < 0 || direccion >= baseDatos.size) return false // Fuera del rango de la base de datos
-
-    // Mapeo de últimos dígitos posibles a posiciones de bits
-    val bits = mapOf(1 to 0, 3 to 1, 7 to 2, 9 to 3)
-    val posicionBit = bits[ultimoDigito] ?: return false
-
-    // Si la década es par, el bit está en la parte alta del byte (nibble alto)
-    val bitPosicionFinal = if (decada % 2 == 0) posicionBit + 4 else posicionBit
-
-    // Extraer el byte correspondiente y verificar el bit
-    val byte = baseDatos[direccion].toInt() and 0xFF
-    return (byte shr bitPosicionFinal) and 1 == 1
+    // Extraer el nibble correspondiente
+    val byte = baseDatos[direccion].toInt() and 0xFF // 7
+    val bitExtraido = (byte shr bitPosicionFinal) and 1  // 8
+    return bitExtraido
 }
 
 
@@ -49,21 +42,23 @@ fun main() {
     }
     logging.info("Recurso encontrado en: ${directorio.directorioAbsolutoBase}")
 
-
+    // 2
     val archivo = java.io.File("${directorio.directorioAbsolutoBase}/0000.pdb")
     if (!archivo.exists()) {
-        logging.info("\"No se encontró la base de datos de primos en: ${directorio.directorioAbsolutoBase}")
+        logging.warn("\"No se encontró la base de datos de primos en: ${directorio.directorioAbsolutoBase}")
         return
     }
 
+    // 3
     val baseDatos = archivo.readBytes()
-
     val numero = 756101
+    //val numero = 1342177281
     if (numero > 1_342_177_280) {
-        println("Introduzca un número válido menor o igual a 1342177280")
+        logging.info("Introduzca un número válido menor o igual a 1342177280")
     }else{
         val resultado = esPrimoBaseDatos(numero, baseDatos)
-        println("$numero ${if (resultado) "ES PRIMO" else "no es primo"}")
+        logging.info("$numero ${if (resultado==1) "ES PRIMO" else "no es primo"}")
+        println("$numero ${if (resultado==1) "ES PRIMO" else "no es primo"}")
     }
 }
 
