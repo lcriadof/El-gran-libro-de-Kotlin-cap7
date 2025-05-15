@@ -12,6 +12,7 @@ import java.io.FileInputStream
 import java.io.DataInputStream
 import java.io.FileOutputStream
 import java.io.DataOutputStream
+import java.nio.file.Paths
 
 fun generarFicheroBinario(fileName:String) {
     val fichero = FileOutputStream(fileName) // para crear o abrir el fichero
@@ -57,7 +58,13 @@ fun modificarNumero(fileName:String,indice: Int, nuevoNumero: Double) {
 
 
 fun main() {
-    val fileName = "./target/classes/binario/datos3.bin"
+
+
+    val resourcePath = "binario/datos3.bin"  // fichero relativo en resources del módulo
+    // Ruta de acceso en el directorio de resources del módulo
+    val fileName = Paths.get("./build/resources/main", resourcePath).toAbsolutePath().toString()
+
+
 
     // Generar el fichero binario con 100 números double aleatorios
     generarFicheroBinario(fileName)

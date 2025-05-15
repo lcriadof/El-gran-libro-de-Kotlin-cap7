@@ -17,7 +17,7 @@ fun main() {
     // fin de bloque 1
 
     // Nombre y path del fichero binario
-    val fileName = "${directorio.directorioAbsolutoBase}datos2.bin"
+    val fileName = "${directorio.directorioAbsolutoBase}datos.bin"
 
 
     // Escritura inicial
